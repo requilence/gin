@@ -10,7 +10,8 @@ import (
 	"net/http"
 	"os"
 	"sync"
-
+	"strings"
+	
 	"github.com/gin-gonic/gin/render"
 )
 
@@ -416,6 +417,8 @@ func redirectTrailingSlash(c *Context) {
 	} else {
 		req.URL.Path = path + "/"
 	}
+	req.URL.Path = "/" + strings.TrimLeft(req.URL.Path, "/")
+	
 	debugPrint("redirecting request %d: %s --> %s", code, path, req.URL.String())
 	http.Redirect(c.Writer, req, req.URL.String(), code)
 	c.writermem.WriteHeaderNow()
